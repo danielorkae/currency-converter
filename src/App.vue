@@ -43,7 +43,6 @@
     <v-navigation-drawer v-model="isDrawerOpen" fixed app>
       <menu-list :list="menu"></menu-list>
     </v-navigation-drawer>
-    <router-view/>
 
     <v-toolbar :color="this.config.app_theme" dark fixed app>
       <v-toolbar-side-icon @click.stop="isDrawerOpen = !isDrawerOpen"/>
@@ -51,6 +50,8 @@
       <v-toolbar-title>{{ this.config.app_title }}</v-toolbar-title>
     </v-toolbar>
 
-    <v-content></v-content>
+    <v-content>
+      <router-view/>
+    </v-content>
   </v-app>
 </template>

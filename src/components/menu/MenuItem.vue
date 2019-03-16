@@ -8,14 +8,14 @@
 
     methods: {
       toNavigate(url) {
-        this.$router.to(url);
+        this.$router.push(url);
       }
     }
   };
 </script>
 
 <template>
-  <v-list-tile @click.prevent="toNavigate(this.url)">
+  <v-list-tile @click.prevent="toNavigate(url)">
     <v-list-tile-action>
       <v-icon>{{ this.icon }}</v-icon>
     </v-list-tile-action>

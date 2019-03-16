@@ -1,38 +1,56 @@
+<script>
+  import app_config from "@/config/app.js";
+  import MenuList from "@/components/menu/MenuList";
+
+  export default {
+    components: {
+      MenuList
+    },
+
+    data: () => ({
+      isDrawerOpen: null,
+
+      menu: [
+        {
+          key: 0,
+          title: "Home",
+          url: "/",
+          icon: "home"
+        },
+        {
+          key: 1,
+          title: "About",
+          url: "/about",
+          icon: "info"
+        }
+      ]
+    }),
+
+    computed: {
+      config() {
+        return app_config;
+      }
+    },
+
+    props: {
+      source: String
+    }
+  };
+</script>
+
 <template>
-  <v-app>
-    <v-toolbar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>Vuetify</span>
-        <span class="font-weight-light">MATERIAL DESIGN</span>
-      </v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn
-        flat
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Latest Release</span>
-      </v-btn>
+  <v-app id="inspire">
+    <v-navigation-drawer v-model="isDrawerOpen" fixed app>
+      <menu-list :list="menu"></menu-list>
+    </v-navigation-drawer>
+    <router-view/>
+
+    <v-toolbar :color="this.config.app_theme" dark fixed app>
+      <v-toolbar-side-icon @click.stop="isDrawerOpen = !isDrawerOpen"/>
+
+      <v-toolbar-title>{{ this.config.app_title }}</v-toolbar-title>
     </v-toolbar>
 
-    <v-content>
-      <HelloWorld/>
-    </v-content>
+    <v-content></v-content>
   </v-app>
 </template>
-
-<script>
-import HelloWorld from './components/HelloWorld'
-
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  },
-  data () {
-    return {
-      //
-    }
-  }
-}
-</script>

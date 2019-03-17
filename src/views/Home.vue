@@ -18,6 +18,8 @@
         sourceValue: 0,
         targetValue: 0,
 
+        conversionCoefficiente: 0,
+
         error: null
       };
     },
@@ -63,7 +65,9 @@
         }
 
         this.loadingCurrencies = false;
-      }
+      },
+
+      async currencySelectHandle() {}
     }
   };
 </script>
@@ -81,6 +85,7 @@
               :loading="loadingCurrencies"
               :hint="sourceCurrencyName"
               persistent-hint
+              @change="currencySelectHandle"
             />
           </v-flex>
           <v-flex align-center>
@@ -94,6 +99,7 @@
               :loading="loadingCurrencies"
               :hint="targetCurrencyName"
               persistent-hint
+              @change="currencySelectHandle"
             />
           </v-flex>
         </v-layout>

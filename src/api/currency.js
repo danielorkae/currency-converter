@@ -14,7 +14,7 @@ async function listAllCurrencies() {
   }
 }
 
-async function getCoefficient(source, target) {
+async function getConversionCoefficient(source, target) {
   try {
     let response = await client.get(`/convert?apiKey=${api_config.api_key}&q=${source}_${target}&compact=ultra`);
     return response.data;
@@ -24,4 +24,4 @@ async function getCoefficient(source, target) {
   }
 }
 
-export default { listAllCurrencies, getCoefficient };
+export default { listAllCurrencies, getConversionCoefficient };

@@ -1,13 +1,22 @@
 <script>
   import api from "@/api/currency";
+  import { VMoney } from "v-money";
 
   export default {
+    directives: {
+      money: VMoney
+    },
+
     data() {
       return {
         loadingCurrencies: false,
         currencies: [],
+
         source: "BRL",
         target: "USD",
+
+        sourceValue: 0,
+        targetValue: 0,
 
         error: null
       };
@@ -23,6 +32,14 @@
       sourceCurrencyName() {
         if (this.currencies[this.source])
           return this.currencies[this.source].currencyName;
+      },
+
+      sourceCurrencySymbol() {
+        if (
+          this.currencies[this.source] &&
+          this.currencies[this.source].currencySymbol
+        )
+          return this.currencies[this.source].currencySymbol;
       },
 
       targetCurrencyName() {
@@ -52,30 +69,44 @@
 </script>
 
 <template>
-  <v-container fluid grid-list-xl>
-    <v-layout align-center>
-      <v-flex xs12 sm6 d-flex>
-        <v-select
-          :items="idsCurrencies"
-          label="Source"
-          v-model="source"
-          :loading="loadingCurrencies"
-          :hint="sourceCurrencyName"
-          persistent-hint
-        />
+  <v-container fluid fill-height align-content-space-between wrap>
+    <v-layout wrap align-content-space-between>
+      <v-flex>
+        <v-layout>
+          <v-flex xs12 sm6 d-flex>
+            <v-select
+              :items="idsCurrencies"
+              label="Source"
+              v-model="source"
+              :loading="loadingCurrencies"
+              :hint="sourceCurrencyName"
+              persistent-hint
+            />
+          </v-flex>
+          <v-flex align-center>
+            <v-icon>swap_horiz</v-icon>
+          </v-flex>
+          <v-flex xs12 sm6 d-flex>
+            <v-select
+              :items="idsCurrencies"
+              label="Target"
+              v-model="target"
+              :loading="loadingCurrencies"
+              :hint="targetCurrencyName"
+              persistent-hint
+            />
+          </v-flex>
+        </v-layout>
       </v-flex>
-      <v-flex align-center>
-        <v-icon>swap_horiz</v-icon>
-      </v-flex>
-      <v-flex xs12 sm6 d-flex>
-        <v-select
-          :items="idsCurrencies"
-          label="Target"
-          v-model="target"
-          :loading="loadingCurrencies"
-          :hint="targetCurrencyName"
-          persistent-hint
-        />
+      <v-flex>
+        <v-layout>
+          <v-text-field
+            :label="sourceCurrencyName"
+            :prefix="sourceCurrencySymbol"
+            v-money="{precision: 2}"
+            v-model="sourceValue"
+          />
+        </v-layout>
       </v-flex>
     </v-layout>
   </v-container>

@@ -17,7 +17,7 @@ async function listAllCurrencies() {
 async function getConversionCoefficient(source, target) {
   try {
     let response = await client.get(`/convert?apiKey=${api_config.api_key}&q=${source}_${target}&compact=ultra`);
-    return response.data;
+    return Object.values(response.data)[0];
   }
   catch (error) {
     throw new Error("Can't convert this currency");

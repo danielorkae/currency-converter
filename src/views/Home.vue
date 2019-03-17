@@ -18,7 +18,7 @@
         sourceValue: 0,
         targetValue: 0,
 
-        conversionCoefficiente: 0,
+        conversionCoefficient: 0,
 
         error: null
       };
@@ -51,7 +51,8 @@
     },
 
     async mounted() {
-      this.loadCurrencies();
+      await this.loadCurrencies();
+      await this.loadConversionCoefficient();
     },
 
     methods: {
@@ -67,7 +68,16 @@
         this.loadingCurrencies = false;
       },
 
-      async currencySelectHandle() {}
+      async loadConversionCoefficient() {
+        try {
+          this.conversionCoefficient = await api.getConversionCoefficient(
+            this.source,
+            this.target
+          );
+        } catch (error) {
+          this.error = error.message;
+        }
+      }
     }
   };
 </script>
@@ -85,7 +95,7 @@
               :loading="loadingCurrencies"
               :hint="sourceCurrencyName"
               persistent-hint
-              @change="currencySelectHandle"
+              @change="loadConversionCoefficient"
             />
           </v-flex>
           <v-flex align-center>
@@ -99,7 +109,7 @@
               :loading="loadingCurrencies"
               :hint="targetCurrencyName"
               persistent-hint
-              @change="currencySelectHandle"
+              @change="loadConversionCoefficient"
             />
           </v-flex>
         </v-layout>

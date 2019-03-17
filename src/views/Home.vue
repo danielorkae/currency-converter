@@ -96,7 +96,7 @@
 </script>
 
 <template>
-  <v-container fluid fill-height align-content-space-between wrap>
+  <v-container fluid fill-height>
     <v-layout wrap align-content-space-between>
       <v-flex xs12>
         <v-layout>
@@ -115,7 +115,7 @@
           />
         </v-layout>
 
-        <v-layout>
+        <v-layout align-center>
           <v-flex xs12 sm6 d-flex>
             <v-select
               :items="idsCurrencies"

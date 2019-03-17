@@ -1,8 +1,12 @@
 <script>
   import api from "@/api/currency";
   import { VMoney } from "v-money";
-
+  import { VAlert } from "vuetify";
   export default {
+    components: {
+      VAlert
+    },
+
     directives: {
       money: VMoney
     },
@@ -97,7 +101,12 @@
 
 <template>
   <v-container fluid fill-height>
-    <v-layout wrap align-content-space-between>
+    <v-layout v-if="!!error" align-start>
+      <v-flex xs12>
+        <v-alert :value="!!error" type="error" outline>{{ this.error }}</v-alert>
+      </v-flex>
+    </v-layout>
+    <v-layout v-else wrap align-content-space-between>
       <v-flex xs12>
         <v-layout>
           <span class="headline">{{ this.targetCurrencySymbol }}</span>

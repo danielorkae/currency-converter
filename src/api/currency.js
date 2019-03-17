@@ -10,7 +10,7 @@ async function listAllCurrencies() {
     let response = await client.get(`/currencies?apiKey=${api_config.api_key}`);
     return response.data.results;
   } catch (error) {
-    throw new Error("Can't load the currencies");
+    throw new Error("We did not have a satisfactory response from server.");
   }
 }
 
@@ -20,7 +20,7 @@ async function getConversionCoefficient(source, target) {
     return Object.values(response.data)[0];
   }
   catch (error) {
-    throw new Error("Can't convert this currency");
+    throw new Error("We did not have a satisfactory response from server.");
   }
 }
 

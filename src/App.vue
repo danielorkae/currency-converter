@@ -1,41 +1,41 @@
 <script>
-  import app_config from "@/config/app.js";
-  import MenuList from "@/components/menu/MenuList";
+import app_config from "@/config/app.js";
+import MenuList from "@/components/menu/MenuList";
 
-  export default {
-    components: {
-      MenuList
-    },
+export default {
+  components: {
+    MenuList
+  },
 
-    data: () => ({
-      isDrawerOpen: null,
+  data: () => ({
+    isDrawerOpen: null,
 
-      menu: [
-        {
-          key: 0,
-          title: "Home",
-          url: "/",
-          icon: "home"
-        },
-        {
-          key: 1,
-          title: "About",
-          url: "/about",
-          icon: "info"
-        }
-      ]
-    }),
-
-    computed: {
-      config() {
-        return app_config;
+    menu: [
+      {
+        key: 0,
+        title: "Home",
+        url: "/",
+        icon: "home"
+      },
+      {
+        key: 1,
+        title: "About",
+        url: "/about",
+        icon: "info"
       }
-    },
+    ]
+  }),
 
-    props: {
-      source: String
+  computed: {
+    config() {
+      return app_config;
     }
-  };
+  },
+
+  props: {
+    source: String
+  }
+};
 </script>
 
 <template>
@@ -45,13 +45,13 @@
     </v-navigation-drawer>
 
     <v-toolbar :color="this.config.app_theme" dark fixed app>
-      <v-toolbar-side-icon @click.stop="isDrawerOpen = !isDrawerOpen"/>
+      <v-toolbar-side-icon @click.stop="isDrawerOpen = !isDrawerOpen" />
 
       <v-toolbar-title>{{ this.config.app_title }}</v-toolbar-title>
     </v-toolbar>
 
     <v-content>
-      <router-view/>
+      <router-view />
     </v-content>
   </v-app>
 </template>

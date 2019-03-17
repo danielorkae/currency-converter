@@ -1,109 +1,119 @@
 <script>
-  import api from "@/api/currency";
-  import { VMoney } from "v-money";
-  import { VAlert } from "vuetify";
-  export default {
-    components: {
-      VAlert
+import api from "@/api/currency";
+import { VMoney } from "v-money";
+import { VAlert } from "vuetify";
+export default {
+  components: {
+    VAlert
+  },
+
+  directives: {
+    money: VMoney
+  },
+
+  data() {
+    return {
+      loadingCurrencies: false,
+      currencies: [],
+
+      source: "BRL",
+      target: "USD",
+
+      sourceValue: 0,
+
+      conversionCoefficient: 0,
+
+      error: null
+    };
+  },
+
+  computed: {
+    idsCurrencies() {
+      return Object.keys(this.currencies).map(key => {
+        return this.currencies[key].id;
+      });
     },
 
-    directives: {
-      money: VMoney
+    sourceCurrencyName() {
+      if (this.currencies[this.source])
+        return this.currencies[this.source].currencyName;
+
+      return "";
     },
 
-    data() {
-      return {
-        loadingCurrencies: false,
-        currencies: [],
+    sourceCurrencySymbol() {
+      if (
+        this.currencies[this.source] &&
+        this.currencies[this.source].currencySymbol
+      )
+        return this.currencies[this.source].currencySymbol;
 
-        source: "BRL",
-        target: "USD",
-
-        sourceValue: 0,
-
-        conversionCoefficient: 0,
-
-        error: null
-      };
+      return "";
     },
 
-    computed: {
-      idsCurrencies() {
-        return Object.keys(this.currencies).map(key => {
-          return this.currencies[key].id;
-        });
-      },
+    targetCurrencyName() {
+      if (this.currencies[this.target])
+        return this.currencies[this.target].currencyName;
 
-      sourceCurrencyName() {
-        if (this.currencies[this.source])
-          return this.currencies[this.source].currencyName;
-      },
+      return "";
+    },
 
-      sourceCurrencySymbol() {
-        if (
-          this.currencies[this.source] &&
-          this.currencies[this.source].currencySymbol
-        )
-          return this.currencies[this.source].currencySymbol;
-      },
+    targetCurrencySymbol() {
+      if (
+        this.currencies[this.target] &&
+        this.currencies[this.target].currencySymbol
+      )
+        return this.currencies[this.target].currencySymbol;
 
-      targetCurrencyName() {
-        if (this.currencies[this.target])
-          return this.currencies[this.target].currencyName;
-      },
+      return "";
+    },
 
-      targetCurrencySymbol() {
-        if (
-          this.currencies[this.target] &&
-          this.currencies[this.target].currencySymbol
-        )
-          return this.currencies[this.target].currencySymbol;
-      },
+    targetValue() {
+      return parseFloat(this.sourceValue * this.conversionCoefficient).toFixed(
+        2
+      );
+    }
+  },
 
-      targetValue() {
-        return parseFloat(this.sourceValue * this.conversionCoefficient).toFixed(
-          2
-        );
+  async mounted() {
+    await this.loadCurrencies();
+    await this.loadConversionCoefficient();
+  },
+
+  methods: {
+    async loadCurrencies() {
+      this.loadingCurrencies = true;
+
+      try {
+        this.currencies = await api.listAllCurrencies();
+      } catch (error) {
+        this.error = error.message;
       }
+
+      this.loadingCurrencies = false;
     },
 
-    async mounted() {
-      await this.loadCurrencies();
-      await this.loadConversionCoefficient();
-    },
-
-    methods: {
-      async loadCurrencies() {
-        this.loadingCurrencies = true;
-
-        try {
-          this.currencies = await api.listAllCurrencies();
-        } catch (error) {
-          this.error = error.message;
-        }
-
-        this.loadingCurrencies = false;
-      },
-
-      async loadConversionCoefficient() {
-        try {
-          this.conversionCoefficient = await api.getConversionCoefficient(
-            this.source,
-            this.target
-          );
-        } catch (error) {
-          this.error = error.message;
-        }
+    async loadConversionCoefficient() {
+      try {
+        this.conversionCoefficient = await api.getConversionCoefficient(
+          this.source,
+          this.target
+        );
+      } catch (error) {
+        this.error = error.message;
       }
     }
-  };
+  }
+};
 </script>
 
 <template>
   <v-container fluid fill-height>
     <v-layout v-if="!!error" align-start>
       <v-flex xs12>
-        <v-alert :value="!!error" type="error" outline>{{ this.error }}</v-alert>
+        <v-alert :value="!!error" type="error" outline>
+          {{ this.error }}
+        </v-alert>
       </v-flex>
     </v-layout>
     <v-layout v-else wrap align-content-space-between>
@@ -119,7 +129,7 @@
           <v-text-field
             :label="sourceCurrencyName"
             :prefix="sourceCurrencySymbol"
-            v-money="{precision: 2, thousands: ''}"
+            v-money="{ precision: 2, thousands: '' }"
             v-model="sourceValue"
           />
         </v-layout>
@@ -155,4 +165,3 @@
     </v-layout>
   </v-container>
 </template>
-

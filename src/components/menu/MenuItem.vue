@@ -1,17 +1,17 @@
 <script>
-  export default {
-    props: {
-      title: String,
-      icon: String,
-      url: String
-    },
+export default {
+  props: {
+    title: String,
+    icon: String,
+    url: String
+  },
 
-    methods: {
-      toNavigate(url) {
-        this.$router.push(url);
-      }
+  methods: {
+    toNavigate(url) {
+      this.$router.push(url);
     }
-  };
+  }
+};
 </script>
 
 <template>

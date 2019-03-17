@@ -1,13 +1,13 @@
 <script>
-  import Item from "./MenuItem";
+import Item from "./MenuItem";
 
-  export default {
-    props: ["list"],
+export default {
+  props: ["list"],
 
-    components: {
-      Item
-    }
-  };
+  components: {
+    Item
+  }
+};
 </script>
 
 <template>

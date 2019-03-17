@@ -7,10 +7,10 @@ var client = axios.create({
 
 async function listAllCurrencies() {
   try {
-    let response = await client.get(`/currencies?apiKey=${api_config.api_key}`);
+    let response = await client.get(`/currencies?apiKeys=${api_config.api_key}`);
     return response.data.results;
   } catch (error) {
-    return { error: "Não foi possível carregar as moedas." };
+    throw new Error("Can't load the currencies");
   }
 }
 
@@ -21,7 +21,7 @@ async function convertCurrency(source, target) {
     return response.data;
   }
   catch (error) {
-    return { error: "Não foi possível converter." };
+    throw new Error("Can't convert this currency");
   }
 }
 

@@ -16,7 +16,6 @@
         target: "USD",
 
         sourceValue: 0,
-        targetValue: 0,
 
         conversionCoefficient: 0,
 
@@ -47,6 +46,20 @@
       targetCurrencyName() {
         if (this.currencies[this.target])
           return this.currencies[this.target].currencyName;
+      },
+
+      targetCurrencySymbol() {
+        if (
+          this.currencies[this.target] &&
+          this.currencies[this.target].currencySymbol
+        )
+          return this.currencies[this.target].currencySymbol;
+      },
+
+      targetValue() {
+        return parseFloat(this.sourceValue * this.conversionCoefficient).toFixed(
+          2
+        );
       }
     },
 
@@ -85,7 +98,23 @@
 <template>
   <v-container fluid fill-height align-content-space-between wrap>
     <v-layout wrap align-content-space-between>
-      <v-flex>
+      <v-flex xs12>
+        <v-layout>
+          <span class="headline">{{ this.targetCurrencySymbol }}</span>
+          <h3 class="display-2">{{ this.targetValue }}</h3>
+        </v-layout>
+      </v-flex>
+
+      <v-flex xs12>
+        <v-layout>
+          <v-text-field
+            :label="sourceCurrencyName"
+            :prefix="sourceCurrencySymbol"
+            v-money="{precision: 2, thousands: ''}"
+            v-model="sourceValue"
+          />
+        </v-layout>
+
         <v-layout>
           <v-flex xs12 sm6 d-flex>
             <v-select
@@ -112,16 +141,6 @@
               @change="loadConversionCoefficient"
             />
           </v-flex>
-        </v-layout>
-      </v-flex>
-      <v-flex>
-        <v-layout>
-          <v-text-field
-            :label="sourceCurrencyName"
-            :prefix="sourceCurrencySymbol"
-            v-money="{precision: 2}"
-            v-model="sourceValue"
-          />
         </v-layout>
       </v-flex>
     </v-layout>

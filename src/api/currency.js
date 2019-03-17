@@ -7,7 +7,7 @@ var client = axios.create({
 
 async function listAllCurrencies() {
   try {
-    let response = await client.get(`/currencies?apiKeys=${api_config.api_key}`);
+    let response = await client.get(`/currencies?apiKey=${api_config.api_key}`);
     return response.data.results;
   } catch (error) {
     throw new Error("Can't load the currencies");

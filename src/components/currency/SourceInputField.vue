@@ -36,6 +36,7 @@
       :prefix="sourceCurrencySymbol"
       v-money="{ precision: 2, thousands: '' }"
       v-model="sourceValue"
+      type="tel"
     />
   </v-layout>
 </template>

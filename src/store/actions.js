@@ -18,7 +18,7 @@ export default {
     try {
       let conversionCoefficient = await api.getConversionCoefficient(source, target);
 
-      commit("SET_CONVERSION_COEFFICIENT", conversionCoefficient);
+      commit("SET_CONVERSION_COEFFICIENT", Object.values(conversionCoefficient)[0]);
     } catch (error) {
       commit("SET_ERROR", error.message);
     }

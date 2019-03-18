@@ -17,7 +17,6 @@
       ...mapState({
         source: state => state.source,
         target: state => state.target,
-        error: state => state.error,
         currencies: state => state.currencies
       }),
 
@@ -25,7 +24,8 @@
         "sourceCurrencyName",
         "sourceCurrencySymbol",
         "targetCurrencyName",
-        "targetCurrencySymbol"
+        "targetCurrencySymbol",
+        "targetValue"
       ]),
 
       sourceKey: {
@@ -84,12 +84,7 @@
 
 <template>
   <v-container fluid fill-height>
-    <v-layout v-if="!!error" align-start>
-      <v-flex xs12>
-        <v-alert :value="!!error" type="error" outline>{{ this.error }}</v-alert>
-      </v-flex>
-    </v-layout>
-    <v-layout v-else wrap align-content-space-between>
+    <v-layout wrap align-content-space-between>
       <v-flex xs12>
         <v-layout>
           <span class="headline">{{ this.targetCurrencySymbol }}</span>

@@ -3,9 +3,11 @@
   import { mapActions, mapState, mapGetters } from "vuex";
   import { VAlert } from "vuetify";
   import { VMoney } from "v-money";
+  import TargetView from "@/components/currency/TargetView";
 
   export default {
     components: {
+      TargetView,
       VAlert
     },
 
@@ -93,10 +95,7 @@
     </v-layout>
     <v-layout v-else wrap align-content-space-between>
       <v-flex xs12>
-        <v-layout>
-          <span class="headline">{{ this.targetCurrencySymbol }}</span>
-          <h3 class="display-2">{{ this.targetValue }}</h3>
-        </v-layout>
+        <target-view :currency-symbol="targetCurrencySymbol" :value="targetValue"/>
       </v-flex>
 
       <v-flex xs12>

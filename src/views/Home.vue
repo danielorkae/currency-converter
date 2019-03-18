@@ -71,6 +71,7 @@
 
     async mounted() {
       await this.loadCurrencies();
+      await this.loadConversionCoefficient();
     },
 
     methods: mapActions([

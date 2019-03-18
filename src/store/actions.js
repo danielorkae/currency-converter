@@ -14,9 +14,9 @@ export default {
     commit("SET_LOADING_CURRENCIES", false);
   },
 
-  async loadConversionCoefficient({ commit }, { source, target }) {
+  async loadConversionCoefficient({ commit, state }) {
     try {
-      let conversionCoefficient = await api.getConversionCoefficient(source, target);
+      let conversionCoefficient = await api.getConversionCoefficient(state.source.key, state.target.key);
 
       commit("SET_CONVERSION_COEFFICIENT", Object.values(conversionCoefficient)[0]);
     } catch (error) {

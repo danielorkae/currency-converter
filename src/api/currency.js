@@ -8,22 +8,20 @@ var client = axios.create({
 async function listAllCurrencies() {
   try {
     let response = await client.get(`/currencies?apiKey=${api_config.api_key}`);
-    return response.data.results;
+    return response.data;
   } catch (error) {
-    throw new Error("We did not have a satisfactory response from server.");
+    throw new Error(error.response ? error.response.data.error : "We did not have a satisfactory response from server.");
   }
 }
 
 async function getConversionCoefficient(source, target) {
   try {
     let response = await client.get(
-      `/convert?apiKey=${
-        api_config.api_key
-      }&q=${source}_${target}&compact=ultra`
+      `/convert?apiKey=${api_config.api_key}&q=${source}_${target}&compact=ultra`
     );
-    return Object.values(response.data)[0];
+    return response.data;
   } catch (error) {
-    throw new Error("We did not have a satisfactory response from server.");
+    throw new Error(error.response ? error.response.data.error : "We did not have a satisfactory response from server.");
   }
 }
 

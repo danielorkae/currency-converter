@@ -1,119 +1,92 @@
 <script>
-import api from "@/api/currency";
-import { VMoney } from "v-money";
-import { VAlert } from "vuetify";
-export default {
-  components: {
-    VAlert
-  },
+  import api from "@/api/currency";
+  import { mapActions, mapState, mapGetters } from "vuex";
+  import { VAlert } from "vuetify";
+  import { VMoney } from "v-money";
 
-  directives: {
-    money: VMoney
-  },
-
-  data() {
-    return {
-      loadingCurrencies: false,
-      currencies: [],
-
-      source: "BRL",
-      target: "USD",
-
-      sourceValue: 0,
-
-      conversionCoefficient: 0,
-
-      error: null
-    };
-  },
-
-  computed: {
-    idsCurrencies() {
-      return Object.keys(this.currencies).map(key => {
-        return this.currencies[key].id;
-      });
+  export default {
+    components: {
+      VAlert
     },
 
-    sourceCurrencyName() {
-      if (this.currencies[this.source])
-        return this.currencies[this.source].currencyName;
-
-      return "";
+    directives: {
+      money: VMoney
     },
 
-    sourceCurrencySymbol() {
-      if (
-        this.currencies[this.source] &&
-        this.currencies[this.source].currencySymbol
-      )
-        return this.currencies[this.source].currencySymbol;
+    computed: {
+      ...mapState({
+        source: state => state.source,
+        target: state => state.target,
+        error: state => state.error,
+        currencies: state => state.currencies
+      }),
 
-      return "";
-    },
+      ...mapGetters([
+        "sourceCurrencyName",
+        "sourceCurrencySymbol",
+        "targetCurrencyName",
+        "targetCurrencySymbol"
+      ]),
 
-    targetCurrencyName() {
-      if (this.currencies[this.target])
-        return this.currencies[this.target].currencyName;
+      sourceKey: {
+        get() {
+          return this.source.key;
+        },
 
-      return "";
-    },
+        async set(key) {
+          this.setSource({ key });
 
-    targetCurrencySymbol() {
-      if (
-        this.currencies[this.target] &&
-        this.currencies[this.target].currencySymbol
-      )
-        return this.currencies[this.target].currencySymbol;
+          await this.loadConversionCoefficient({
+            source: this.sourceKey,
+            target: this.targetKey
+          });
+        }
+      },
 
-      return "";
-    },
+      sourceValue: {
+        get() {
+          return this.source.value;
+        },
 
-    targetValue() {
-      return parseFloat(this.sourceValue * this.conversionCoefficient).toFixed(
-        2
-      );
-    }
-  },
+        set(value) {
+          this.setSource({ value });
+        }
+      },
 
-  async mounted() {
-    await this.loadCurrencies();
-    await this.loadConversionCoefficient();
-  },
+      targetKey: {
+        get() {
+          return this.target.key;
+        },
 
-  methods: {
-    async loadCurrencies() {
-      this.loadingCurrencies = true;
+        async set(key) {
+          this.setTarget({ key });
 
-      try {
-        this.currencies = await api.listAllCurrencies();
-      } catch (error) {
-        this.error = error.message;
+          await this.loadConversionCoefficient({
+            source: this.sourceKey,
+            target: this.targetKey
+          });
+        }
       }
-
-      this.loadingCurrencies = false;
     },
 
-    async loadConversionCoefficient() {
-      try {
-        this.conversionCoefficient = await api.getConversionCoefficient(
-          this.source,
-          this.target
-        );
-      } catch (error) {
-        this.error = error.message;
-      }
-    }
-  }
-};
+    async mounted() {
+      await this.loadCurrencies();
+    },
+
+    methods: mapActions([
+      "setSource",
+      "setTarget",
+      "loadCurrencies",
+      "loadConversionCoefficient"
+    ])
+  };
 </script>
 
 <template>
   <v-container fluid fill-height>
     <v-layout v-if="!!error" align-start>
       <v-flex xs12>
-        <v-alert :value="!!error" type="error" outline>
-          {{ this.error }}
-        </v-alert>
+        <v-alert :value="!!error" type="error" outline>{{ this.error }}</v-alert>
       </v-flex>
     </v-layout>
     <v-layout v-else wrap align-content-space-between>
@@ -137,13 +110,12 @@ export default {
         <v-layout align-center>
           <v-flex xs12 sm6 d-flex>
             <v-select
-              :items="idsCurrencies"
+              :items="currencies.keys"
               label="Source"
-              v-model="source"
-              :loading="loadingCurrencies"
+              v-model="sourceKey"
+              :loading="currencies.loading"
               :hint="sourceCurrencyName"
               persistent-hint
-              @change="loadConversionCoefficient"
             />
           </v-flex>
           <v-flex align-center>
@@ -151,13 +123,12 @@ export default {
           </v-flex>
           <v-flex xs12 sm6 d-flex>
             <v-select
-              :items="idsCurrencies"
+              :items="currencies.keys"
               label="Target"
-              v-model="target"
-              :loading="loadingCurrencies"
+              v-model="targetKey"
+              :loading="currencies.loading"
               :hint="targetCurrencyName"
               persistent-hint
-              @change="loadConversionCoefficient"
             />
           </v-flex>
         </v-layout>
